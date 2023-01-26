@@ -10,29 +10,65 @@
     </head>
     <body>
         <!-- <h1>Welcome to Bender</h1> -->
-        <button id="addLoad" onclick="addElement(0)">Add Load</button>
-        <button id="addConn" onclick="addElement(1)">Add Connection</button>
-        <button id="alterBeam" onclick="addElement(2)">Alter Beam</button>
+        <div class="editButtons">
+            <button id="addLoad" onclick="addElement(0)">Add Load</button>
+            <button id="addSupp" onclick="addElement(1)">Add Connection</button>
+            <button id="alterBeam" onclick="addElement(2)">Alter Beam</button>
+        </div>
+
         <div id="AppMain" name="AppMain" class="AppMain">
-            <canvas id="AppCanvas" width="500px" height="500px" name="AppCanvas" class="AppCanvas"></canvas>
+            <canvas id="AppCanvas" width="500px" height="300px" name="AppCanvas" class="AppCanvas"></canvas>
         </div>
 
-        <div id="loadDiv" hidden>
-            <h3>Adding new Load</h3>
-            <p>Use the below inputs to add a load to the beam</p>
-            <button id="cancelLoad" onclick="cancelFunc()">Cancel</button>
+        <div class="controlPanel">
+            <div id="loadDiv" hidden>
+                <h3>Adding new Load</h3>
+                <p>Use the below inputs to add a load to the beam</p>
+                <button id="acceptLoad" onclick="">Accept</button>
+                <button id="cancelLoad" onclick="cancelFunc()">Cancel</button>
+            </div>
+    
+            <div id="suppDiv" hidden>
+                <!-- <div id="suppDiv" hidden> -->
+                <h3>Adding new Support</h3>
+                <p>Use the below inputs to add a support to the beam</p>
+                <label for="supportType">Select a support: </label>
+                <select id="supportType" name="supportType" onchange="changeSupportType()">
+                    <option hidden>Select a support type</option>
+                    <option id="RollerSupport" name="RollerSupport" value="0">Roller</option>
+                    <option id="PinnedSupport" name="PinnedSupport" value="1">Pinned</option>                   
+                    <option id="FixedSupport" name="FixedSupport" value="2">Fixed</option>
+                    <option id="MiddleHingeAxialSupport" name="MiddleHingeAxialSupport" hidden>Middle Hinge for Axial</option>
+                    <option id="MiddleHingeBeamSupport" name="MiddleHingeBeamSupport" hidden>Middle Hinge for beam</option>
+                </select>
+
+                <div id="RollerEdit" hidden>
+                    <p>Edit/Add Roller Support</p>
+                </div>
+                
+                <div id="PinnedEdit" hidden>
+                    <p>Edit/Add Pinned Support</p>
+                </div>
+                
+                <div id="FixedEdit" hidden>
+                    <p>Edit/Add Fixed Support</p>
+                </div>
+
+                <br/>
+
+                <br/><br/>
+                <button id="acceptSupport" onclick="">Accept</button>
+                <button id="cancelSupport" onclick="cancelFunc()">Cancel</button>
+            </div>
+    
+            <div id="beamDiv" hidden>
+                <h3>Altering the beam</h3>
+                <p>Use the below inputs to add a connection to the beam</p>
+
+                <button id="acceptBeamEdit" onclick="">Accept</button>
+                <button id="cancelBeamEdit" onclick="cancelFunc()">Cancel</button>
+            </div>
         </div>
 
-        <div id="connDiv" hidden>
-            <h3>Adding new Connection</h3>
-            <p>Use the below inputs to add a connection to the beam</p>
-            <button id="cancelLoad" onclick="cancelFunc()">Cancel</button>
-        </div>
-
-        <div id="beamDiv" hidden>
-            <h3>Altering the beam</h3>
-            <p>Use the below inputs to add a connection to the beam</p>
-            <button id="cancelLoad" onclick="cancelFunc()">Cancel</button>
-        </div>
     </body>
 </html>

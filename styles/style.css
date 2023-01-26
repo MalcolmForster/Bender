@@ -2,6 +2,10 @@ body {
     margin:0;
 }
 
+.editButtons {
+    margin:5px;
+}
+
 .AppMain {    
     width: 100vw;
 }
@@ -9,4 +13,8 @@ body {
 .AppCanvas {
     background-color: antiquewhite;
     /* width:100%; */
+}
+
+.controlPanel {
+    margin:10px;
 }

@@ -12,14 +12,16 @@ window.onload = function(){
 
 };
 
-var array = ["loadDiv", "connDiv", "beamDiv"];
+var ctrlDivs = ["loadDiv", "suppDiv", "beamDiv"];
 
-function hideOtherDivs(eleNum) {
+function hideOtherDivs(eleNum, array) {
     i = 0;
     while(i < array.length) {
-        if(i != eleNum) {
-            var otherEle = document.getElementById(array[i]);
+        var otherEle = document.getElementById(array[i]);
+        if(i != eleNum) {        
             otherEle.style ="hidden";            
+        } else {            
+            otherEle.style.display = "block";
         }
         i++;
     }
@@ -31,37 +33,25 @@ function addElement(eleType) {
 
     if(eleType == 0) {
         //add a load to the beam
-        console.log("going to add a load")
-        var ele = document.getElementById("loadDiv");
-        if(ele.style.display != "block") {
-            console.log("was not found");
-            ele.style.display = "block";
-        }
-        hideOtherDivs(eleType);
+        console.log("going to add a load");   
     } else if(eleType == 1) {
         //add a connecton to the beam
-        console.log("going to add a load")
-        var ele = document.getElementById("connDiv");
-
-        if(ele.style.display != "block") {
-            console.log("was not found");
-            ele.style.display = "block";
-        }
-
-        hideOtherDivs(eleType);
+        console.log("going to add a support");
         
     } else if(eleType == 2) {
-        console.log("going to add a load")
+        console.log("editing beam")
         var ele = document.getElementById("beamDiv");
-        if(ele.style.display != "block") {
-            console.log("was not found");
-            ele.style.display = "block";
-        }
-        hideOtherDivs(eleType);
     }
+    hideOtherDivs(eleType,ctrlDivs);
 }
 
 function cancelFunc() {
-   hideOtherDivs();
+   hideOtherDivs(-1,ctrlDivs);
 }
 
+function changeSupportType() {
+    var num = parseInt($("#supportType").find(":selected").val());
+    
+    var array = ["RollerEdit", "PinnedEdit", "FixedEdit"];
+    hideOtherDivs(num, array);
+}
