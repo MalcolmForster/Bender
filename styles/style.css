@@ -1,7 +1,12 @@
-.AppMain {
+body {
+    margin:0;
+}
+
+.AppMain {    
     width: 100vw;
 }
 
 .AppCanvas {
     background-color: antiquewhite;
+    /* width:100%; */
 }

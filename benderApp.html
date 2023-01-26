@@ -8,9 +8,30 @@
         <script src="scripts/script.js"></script>
     </head>
     <body>
-        <h1>Welcome to Bender</h1>
+        <!-- <h1>Welcome to Bender</h1> -->
+        <button id="addLoad" onclick="addElement(0)">Add Load</button>
+        <button id="addConn" onclick="addElement(1)">Add Connection</button>
+        <button id="alterBeam" onclick="addElement(2)">Alter Beam</button>
         <div id="AppMain" name="AppMain" class="AppMain">
-            <canvas id="AppCanvas" name="AppCanvas" class="AppCanvas"></canvas>
+            <canvas id="AppCanvas" width="500px" height="500px" name="AppCanvas" class="AppCanvas"></canvas>
+        </div>
+
+        <div id="loadDiv" hidden>
+            <h3>Adding new Load</h3>
+            <p>Use the below inputs to add a load to the beam</p>
+            <button id="cancelLoad" onclick="cancelFunc()">Cancel</button>
+        </div>
+
+        <div id="connDiv" hidden>
+            <h3>Adding new Connection</h3>
+            <p>Use the below inputs to add a connection to the beam</p>
+            <button id="cancelLoad" onclick="cancelFunc()">Cancel</button>
+        </div>
+
+        <div id="beamDiv" hidden>
+            <h3>Altering the beam</h3>
+            <p>Use the below inputs to add a connection to the beam</p>
+            <button id="cancelLoad" onclick="cancelFunc()">Cancel</button>
         </div>
     </body>
 </html>
