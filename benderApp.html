@@ -24,8 +24,36 @@
             <div id="loadDiv" hidden>
                 <h3>Adding new Load</h3>
                 <p>Use the below inputs to add a load to the beam</p>
-                <button id="acceptLoad" onclick="">Accept</button>
-                <button id="cancelLoad" onclick="cancelFunc()">Cancel</button>
+                <label for="loadType">Select a support: </label>
+                <select id="loadType" name="loadType" onchange="changeLoadType()">
+                    <option hidden>Select a load type</option>
+                    <option id="DistributedLoad" name="DistributedLoad" value="0">Roller</option>
+                    <option id="PinLoad" name="PinLoad" value="1">Pinned</option>                   
+                    <option id="MomentLoad" name="MomentLoad" value="2">Fixed</option>
+                </select>
+                <!-- <button id="acceptLoad" onclick="">Accept</button>
+                <button id="cancelLoad" onclick="cancelFunc()">Cancel</button> -->
+
+                <div id="DistributedEdit" hidden>
+                    <label for="distributedLeft">Left amount</label><input type="text" name="distributedLeft" id="distributedLeft"/><br/><br/>
+                    <label for="distributedRight">Right amount</label><input type="text" name="distributedRight" id="distributedRight"/><br/><br/>
+                    <p>Click on model twice to place the left and right locations of the distributed load.</p>
+                </div>
+
+                <div id="PinEdit" hidden>
+                    <label for="pinAmount">Load amount:</label><input type="text" name="pinAmount" id="pinAmount"/><br/><br/>
+                    <p>Click on model place the pin load.</p>
+                </div>
+
+
+                <div id="momentEdit" hidden>
+                    <label for="momentAmount">Moment amount:</label><input type="text" name="momentAmount" id="momentAmount"/><br/><br/>
+                    <p>Click on model to place moment.</p>
+                </div>
+
+                <br/>
+                <br/>
+
             </div>
     
             <div id="suppDiv" hidden>
