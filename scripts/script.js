@@ -2,10 +2,17 @@ var beamHeight;
 var beamThk;
 var canvasWidth;
 var canvasBorder = 50;
+var a = 0;
+
+var ds;
 
 var RollerSupports = [];
 var PinSupports = [];
 var FixedSupports = [];
+
+var DistributedLoads = [];
+var PointLoads = [];
+var MomentLoads = [];
 
 window.onload = function(){
 
@@ -26,7 +33,7 @@ window.onload = function(){
 var ctrlDivs = ["loadDiv", "suppDiv", "beamDiv"];
 var supportDivs = ["RollerEdit", "PinnedEdit", "FixedEdit"];
 var loadDivs = ["DistributedEdit", "PointEdit", "MomentEdit"];
-var allDivsToHide = [...ctrlDivs, ...supportDivs];
+var allDivsToHide = [...ctrlDivs, ...supportDivs, ...loadDivs];
 
 function hideOtherDivs(eleNum, array) {
     if(array == null) {
@@ -67,9 +74,13 @@ function cancelFunc() {
 }
 
 function changeSupportType() {
-    var num = parseInt($("#supportType").find(":selected").val());
-    
+    var num = parseInt($("#supportType").find(":selected").val());    
     hideOtherDivs(num, supportDivs);
+}
+
+function changeLoadType() {
+    var num = parseInt($("#loadType").find(":selected").val());    
+    hideOtherDivs(num, loadDivs);
 }
 
 function findVisibleDiv(divArray) {
@@ -87,11 +98,14 @@ function canvasClick(event) {
     var c = document.getElementById("AppCanvas");
     var marg = (window.getComputedStyle(c)).marginLeft;
     var clickLocation = event.clientX;
-    var visibleDiv = findVisibleDiv(supportDivs);
-    var clickX = clickLocation-parseInt(marg);
-
+    var visibleDiv = findVisibleDiv([...supportDivs,...loadDivs]);
+    var clickX = Math.max( canvasBorder,Math.min(clickLocation-parseInt(marg), canvasWidth-canvasBorder));
+    console.log(visibleDiv);
+    // Checks what div is visible and select
     if(supportDivs.includes(visibleDiv)) {
         createSupport(c,visibleDiv,clickX);
+    } else if(loadDivs.includes(visibleDiv)) {        
+        createLoad(c,visibleDiv,clickX);        
     }
 }
 
@@ -135,7 +149,7 @@ class PinSupport {
     constructor(location, canvas) {
         this.location = location;
         var sideLength = 10;
-        var bottomOfBeam = beamHeight +(beamThk/2)
+        var bottomOfBeam = beamHeight +(beamThk/2);
 
         canvas.beginPath();
         canvas.moveTo(location, bottomOfBeam);
@@ -184,37 +198,70 @@ class FixedSupport {
 
 // Method called from html page to create loads
 
-function createLoad(c,kind,location,amount) {
-
-    var canvas = c.getContext("2d");
+function createLoad(c,kind,location) {
+    var canvas = c.getContext("2d");   
     if(kind==loadDivs[0]) {
-        let rs = new DistributedLoad(location[0],location[1], amount[0],amount[1],canvas);
-        DistributedLoads.push(rs);
-        console.log(DistributedLoads.length);
-
+        if(a == 1) {            
+            var amount = $("#distributedFinish").val();
+            if(parseInt(amount)){
+                console.log(ds);
+                ds.second(location,amount,canvas);
+                DistributedLoads.push(ds);                                
+                console.log(DistributedLoads.length);
+                a = 0;
+            } else {
+                console.log("Need to input a number");
+            }
+        } else {
+            var amount = $("#distributedStart").val();
+            if(parseInt(amount)){   
+                ds = new DistributedLoad(location, amount);
+                a = 1;
+                console.log(ds);
+            }  else {
+                console.log("Need to input a number");
+            }          
+        }
     } else if (kind == loadDivs[1]) {
-        let pl = new PointLoad(location, amount, canvas);
-        PointLoads.push(pl);
-        console.log(PointLoads.length);
+        var amount = $("#pointAmount").val();
+        if(parseInt(amount)){
+            let pl = new PointLoad(location, amount, canvas);
+            PointLoads.push(pl);
+            console.log(PointLoads.length);
+        } else {
+            console.log("Need to input a number");
+        }            
 
     } else if (kind == loadDivs[2]) {
-        let mo = new Moment(location, amount, canvas);
-        MomentLoads.push(mo);
-        console.log(MomentLoads.length);
-    }
-     
+        var amount = $("#momentAmount").val();
+        if (parseInt(amount)) {
+            let mo = new Moment(location, amount, canvas);
+            MomentLoads.push(mo);
+            console.log(MomentLoads.length);
+        } else {
+            console.log("Need to input a number");
+        }
+    }     
 }
 
 // Below are the load classes
-
 class DistributedLoad {
-    constructor(startLoc, finishLoc, startHeight, finishHeight, canvas) {
-        this.startLoc = startLoc;
+    constructor(startLoc, startHeight) {
+        this.startLoc = startLoc;        
+        this.startAmount = startHeight;            
+    }
+
+    second(finishLoc, finishHeight, canvas) {
+        var topOfBeam = beamHeight - (beamThk/2);
         this.finishLoc = finishLoc;
-        this.leftAmount = startHeight;
-        this.rightAmount = finishHeight;
+        this.finishAmount = finishHeight;
 
-
+        canvas.beginPath();
+        canvas.moveTo(this.startLoc,topOfBeam);
+        canvas.lineTo(this.startLoc,topOfBeam-this.startAmount);
+        canvas.lineTo(this.finishLoc,topOfBeam-this.finishAmount);
+        canvas.lineTo(this.finishLoc,topOfBeam);
+        canvas.fill();
     }
 }
 
@@ -224,12 +271,15 @@ class PointLoad {
         this.amount = amount; // size of the point load applied
 
         var sideLength = 10;
-        var topOfBeam = beamHeight - (beamThk/2)
+        var rectWidth = 6;
+        var rectHeight = 10;
+        var topOfBeam = beamHeight - (beamThk/2);
         
         canvas.beginPath();
         canvas.moveTo(location, topOfBeam);
         canvas.lineTo(location+(sideLength/2), topOfBeam-10);
         canvas.lineTo(location-(sideLength/2), topOfBeam-10);
+        canvas.rect(location-(rectWidth/2),topOfBeam-10-rectHeight,rectWidth,rectHeight);
         canvas.fill();
     }
 }
@@ -238,6 +288,11 @@ class Moment {
     constructor(location, amount, canvas) {
         this.location = location;
         this.amount = amount; // Size of the moment, +ve = cw and -ve = ccw moments
+        var circleRad = 15;
+        canvas.lineWidth = 3;
+        canvas.beginPath();
+        canvas.arc(location, beamHeight, circleRad,  Math.PI * 0.25, Math.PI * 1.75);
+        
+        canvas.stroke();
     }
 }
-
