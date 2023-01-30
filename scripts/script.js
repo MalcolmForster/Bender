@@ -197,14 +197,12 @@ class FixedSupport {
 
 
 // Method called from html page to create loads
-
 function createLoad(c,kind,location) {
     var canvas = c.getContext("2d");   
     if(kind==loadDivs[0]) {
         if(a == 1) {            
             var amount = $("#distributedFinish").val();
             if(parseInt(amount)){
-                console.log(ds);
                 ds.second(location,amount,canvas);
                 DistributedLoads.push(ds);                                
                 console.log(DistributedLoads.length);
@@ -217,7 +215,6 @@ function createLoad(c,kind,location) {
             if(parseInt(amount)){   
                 ds = new DistributedLoad(location, amount);
                 a = 1;
-                console.log(ds);
             }  else {
                 console.log("Need to input a number");
             }          
